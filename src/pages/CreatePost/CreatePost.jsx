@@ -14,25 +14,40 @@ const CreatePost = () => {
 
 	const { user } = useAuthValue();
 	const { insertDocument, response } = useInsertDocument("posts");
+    const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setFormError("");
 
 		// validar url da imagem
+		try {
+			new URL(image);
+		} catch (error) {
+			setFormError("URL da imagem inválida");
+		}
 
 		// criar array de tags
+		const tagsArray = tags
+			.split(",")
+			.map((tag) => tag.trim().toLowerCase());
 
 		// checar todos os valores
+		if (!title || !image || !body || !tags) {
+			setFormError("Preencha todos os campos");
+		}
+		if (formError) return;
 
 		insertDocument({
 			title,
 			image,
 			body,
-			tags,
+			tagsArray,
 			uid: user.uid,
 			createdBy: user.displayName,
 		});
+
+        navigate("/")
 	};
 
 	return (
