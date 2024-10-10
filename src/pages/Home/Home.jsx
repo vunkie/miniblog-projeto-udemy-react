@@ -9,9 +9,14 @@ const Home = () => {
 	const [query, setQuery] = useState("");
 	const { documents: posts, loading } = useFetchDocuments("posts");
 
+	const navigate = useNavigate();
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(query);
+		
+		if (query) {
+			return navigate(`/search?q=${query}`);
+		}
 	};
 
 	return (
